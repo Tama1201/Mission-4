@@ -10,6 +10,7 @@
   --grey-light: #eeeeee;
   --grey-dark: #405175;
   --blue: #2d70fd;
+  --green: #28a745;
   --white: #ffffff;
 }
 
@@ -85,13 +86,22 @@ input[type="text"]::placeholder {
 
 .todo-container {
   display: flex;
-  gap: 1rem;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+}
+
+.disabled {
+  text-decoration: line-through;
+  color: var(--grey-dark);
 }
 
 ul {
+  list-style: none;
   padding: 0;
   margin: 0;
-  overflow-y: scroll;
+  overflow-y: auto;
+  max-height: 15rem;
 }
 
 li {
@@ -109,20 +119,29 @@ li {
   text-decoration: line-through;
 }
 
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+}
+
 input[type="checkbox"]::before {
-  content: "/2713";
-  display: inline-block;
+  content: "\2713"; /* Unicode untuk centang */
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 2rem;
   height: 2rem;
-  font-size: 1.7rem;
+  font-size: 1.2rem;
   text-align: center;
   border: 0.06rem solid var(--grey-border);
-  border-radius: 50%;
+  border-radius: 0.5rem; /* Kotak, ubah ke 50% jika ingin bulat */
   color: transparent;
 }
 
-input[type="checkbox"]::before::after {
-  color: var(-white);
+input[type="checkbox"]:checked::after {
+  color: var(--white);
   background-color: var(--green);
   border: 0.06rem solid var(--green);
   border-radius: 50%;
@@ -183,4 +202,11 @@ input[type="checkbox"]::before::after {
 
 .scroll::-webkit-scrollbar-track {
   display: none;
+}
+
+.timestamp {
+  font-size: 0.8rem;
+  color: var(--grey);
+  display: block;
+  margin-top: 0.3rem;
 }

@@ -12,7 +12,7 @@ const deleteButton = document.getElementById("deleteButton");
 document.addEventListener("DOMContentLoaded", function () {
   addButton.addEventListener("click", addTask);
   todoInput.addEventListener("keydown", function (event) {
-    if (Event.key === "Enter") {
+    if (event.key === "Enter") {
       event.preventDefault();
       addTask();
     }
@@ -24,30 +24,54 @@ document.addEventListener("DOMContentLoaded", function () {
 function addTask() {
   const newTask = todoInput.value.trim();
   if (newTask !== "") {
-    todo.push({
+    const currentTime = new Date().toLocaleString();
+    const newTodo = {
       text: newTask,
       disabled: false,
-    });
+      time: currentTime,
+    };
+    todo.push(newTodo);
     saveToLocalStorage();
     todoInput.value = "";
-    displayTask();
+    displayTasks();
   }
 }
 
 function deleteAllTask() {
-  console.log("test");
+  todo = [];
+  saveToLocalStorage();
+  displayTasks();
 }
 
-function displayTask() {
+function toggleTask(index) {
+  todo[index].disabled = !todo[index].disabled; // Toggle antara true & false
+  saveToLocalStorage(); // Simpan perubahan ke localStorage
+  displayTasks(); // Refresh tampilan
+}
+
+function displayTasks() {
   todoList.innerHTML = "";
-  todo.forEach((item, index)=> {
-    const p = document.createElement("p");
-    p.innerHTML = `
-    <div class="todo-container>
-    <input type="checkbox" class="todo-checkbox" id="input-${}">
-    </div>    
-    `
+  todo.forEach((item, index) => {
+    const li = document.createElement("li");
+    li.innerHTML = `
+      <div class="todo-container">
+        <input type="checkbox" class="todo-checkbox" id="input-${index}" ${
+      item.disabled ? "checked" : ""
+    }>
+          <p id="todo-${index}" class="${item.disabled ? "disabled" : ""}">${
+      item.text
+    }</p>
+          <span class="timestamp">${
+            item.time ? item.time : "No time available"
+          }</span>
+        </div>
+    `;
+    li.querySelector(".todo-checkbox").addEventListener("change", () =>
+      toggleTask(index)
+    );
+    todoList.appendChild(li);
   });
+  todoCount.textContent = todo.length;
 }
 
 function saveToLocalStorage() {
